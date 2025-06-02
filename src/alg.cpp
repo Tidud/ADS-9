@@ -1,9 +1,10 @@
 // Copyright 2022 NNTU-CS
+#include <algorithm>
 #include <cstdlib>
 #include <fstream>
-#include <algorithm>
 #include <iostream>
 #include <locale>
+#include <vector>
 #include "tree.h"
 
 long long calculateSafeFactorial(int value) {
@@ -93,8 +94,8 @@ std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
 
   size_t initial_elements_count = tree.getRoot()->children.size();
 
-  long long estimated_total_perms = calculateSafeFactorial(
-      static_cast<int>(initial_elements_count));  // Преобразование size_t в int
+  long long estimated_total_perms =
+      calculateSafeFactorial(static_cast<int>(initial_elements_count));
   if (estimated_total_perms > 0) {
     collected_permutations.reserve(static_cast<size_t>(estimated_total_perms));
   }
@@ -107,13 +108,11 @@ std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
 std::vector<char> getPerm1(PMTree& tree, int num) {
   std::vector<std::vector<char>> all_generated_perms = getAllPerms(tree);
 
-  if (num <= 0 || static_cast<size_t>(num) >
-                      all_generated_perms.size()) {  // Сравнение int с size_t
+  if (num <= 0 || static_cast<size_t>(num) > all_generated_perms.size()) {
     return {};
   }
 
-  return all_generated_perms[static_cast<size_t>(
-      num - 1)];  // Преобразование int в size_t для индекса
+  return all_generated_perms[static_cast<size_t>(num - 1)];
 }
 
 std::vector<char> getPerm2(PMTree& tree, int num) {
@@ -129,25 +128,22 @@ std::vector<char> getPerm2(PMTree& tree, int num) {
   for (PMTree::Node* child_option : current_traversal_node->children) {
     available_elements_pool.push_back(child_option->data);
   }
-  size_t total_original_elements_size =
-      available_elements_pool.size();  // Используем size_t
+  size_t total_original_elements_size = available_elements_pool.size();
 
   long long maximum_possible_permutations =
-      calculateSafeFactorial(static_cast<int>(
-          total_original_elements_size));  // Преобразуем size_t в int
+      calculateSafeFactorial(static_cast<int>(total_original_elements_size));
   if (maximum_possible_permutations == -1 ||
       zero_based_query_index >= maximum_possible_permutations) {
     return {};
   }
 
-  for (size_t i = total_original_elements_size; i >= 1;
-       --i) {  // Цикл по size_t
+  for (size_t i = total_original_elements_size; i >= 1; --i) {
     if (available_elements_pool.empty()) {
       return {};
     }
 
-    long long permutations_in_sub_branch = calculateSafeFactorial(
-        static_cast<int>(i - 1));  // Преобразуем size_t в int
+    long long permutations_in_sub_branch =
+        calculateSafeFactorial(static_cast<int>(i - 1));
     if (permutations_in_sub_branch == -1) {
       return {};
     }
@@ -160,16 +156,14 @@ std::vector<char> getPerm2(PMTree& tree, int num) {
       return {};
     }
 
-    char chosen_element_value = available_elements_pool[static_cast<size_t>(
-        selected_element_index)];  // Преобразуем int в size_t
+    char chosen_element_value =
+        available_elements_pool[static_cast<size_t>(selected_element_index)];
     resulting_permutation.push_back(chosen_element_value);
 
     zero_based_query_index %= permutations_in_sub_branch;
 
-    available_elements_pool.erase(
-        available_elements_pool.begin() +
-        static_cast<size_t>(
-            selected_element_index));  // Преобразуем int в size_t
+    available_elements_pool.erase(available_elements_pool.begin() +
+                                  static_cast<size_t>(selected_element_index));
   }
 
   if (resulting_permutation.size() == total_original_elements_size) {
