@@ -4,6 +4,7 @@
 #include <iostream>
 #include <numeric>
 #include <random>
+#include <vector>
 #include "tree.h"
 
 int64_t calculateSafeFactorial(int value);
@@ -26,25 +27,25 @@ int main() {
     auto start_getAllPerms = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<char>> all_perms = getAllPerms(tree);
     auto end_getAllPerms = std::chrono::high_resolution_clock::now();
-    long long duration_getAllPerms =
+    int64_t duration_getAllPerms =
         std::chrono::duration_cast<std::chrono::microseconds>(end_getAllPerms -
                                                               start_getAllPerms)
             .count();
 
-    long long total_perms_count = calculateSafeFactorial(n);
+    int64_t total_perms_count = calculateSafeFactorial(n);
     if (total_perms_count == -1) {
       std::cout << n << "," << duration_getAllPerms << ",-1,-1\n";
       continue;
     }
 
-    std::uniform_int_distribution<long long> dist(1, total_perms_count);
+    std::uniform_int_distribution<int64_t> dist(1, total_perms_count);
 
     const int NUM_SAMPLES = 100;
-    long long total_duration_getPerm1 = 0;
-    long long total_duration_getPerm2 = 0;
+    int64_t total_duration_getPerm1 = 0;
+    int64_t total_duration_getPerm2 = 0;
 
     for (int i = 0; i < NUM_SAMPLES; ++i) {
-      long long random_perm_num = dist(gen);
+      int64_t random_perm_num = dist(gen);
 
       auto start_getPerm1 = std::chrono::high_resolution_clock::now();
       std::vector<char> perm1_result =
@@ -75,4 +76,6 @@ int main() {
   }
 
   return 0;
+}
+
 }
