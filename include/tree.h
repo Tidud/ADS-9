@@ -10,10 +10,10 @@ class PMTree {
     char data;
     std::vector<Node*> children;
 
-    Node(char val = '\0') : data(val) {}
+    explicit Node(char val = '\0') : data(val) {}
   };
 
-  PMTree(std::vector<char> in);
+  explicit PMTree(std::vector<char> in);
   ~PMTree();
 
   Node* getRoot() const { return root; }
